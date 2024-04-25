@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+session_regenerate_id(true);
 // Define the whitelist regex patterns
 $namePattern = '/^[A-Za-z\s]+$/';
 $matricnumberPattern = '/^[A-Za-z0-9]+$/';
@@ -210,7 +211,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
 }
-
+session_unset(); // remove all stored values in session variables
+session_destroy(); // Destroys all data registered to a session
 ?>
 
 

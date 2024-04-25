@@ -149,6 +149,9 @@ if (isset($_POST['delete'])) {
         echo "Error deleting record: " . mysqli_error($conn);
     }
 }
+
+session_unset(); // remove all stored values in session variables
+session_destroy(); // Destroys all data registered to a session
 ?>
 
 <form method="POST" action="">
