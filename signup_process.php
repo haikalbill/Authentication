@@ -16,11 +16,8 @@ if ($conn->connect_error) {
 // Get form data
 $username = $_POST['username'];
 $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-$matricnumber = $_POST['matricnumber'];
-$email = $_POST['email'];
-$phonenumber = $_POST['phonenumber'];
 // Insert data into database
-$sql = "INSERT INTO users (username, matricnumber, password, email, phonenumber ) VALUES ('$username','$matricnumber', '$password', '$email', '$phonenumber')";
+$sql = "INSERT INTO users (username, password) VALUES ('$username','$password')";
 
 
 

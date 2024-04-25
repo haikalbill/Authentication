@@ -16,26 +16,30 @@ if ($conn->connect_error) {
 }
 
 // Get form data
-$matricnumber = $_POST['matricnumber'];
+$username = $_POST['username'];
 $password = $_POST['password'];
 
 
 // Check user credentials
-$sql = "SELECT * FROM users WHERE matricnumber='$matricnumber'";
+$sql = "SELECT * FROM users WHERE username='$username'";
 $result = $conn->query($sql);
 
 
 if ($result->num_rows == 1) {
     $row = $result->fetch_assoc();
-    $username = $row['username'];
-    if (password_verify($password, $row['password'])) {
-        echo "Login successful. Welcome, " . $username;
-        $_SESSION['matricnumber'] = $matricnumber; // Store username in session for future use
+    $_SESSION['username'] = $username;
+    $_SESSION['role'] = $row['role'];
+    if (password_verify($password, $row['password']) && $row['role'] == 'admin') {
+        header("Location: adminpage.php");
+        $_SESSION['username'] = $username; // Store username in session for future use
     } else {
-        echo "Incorrect password.";
+        header("Location: studentpage.php");
+           $_SESSION['username'] = $username;
     }
+    exit();
 } else {
-    echo "User not found.";
+    echo '<script>alert("Invalid Credentials")</script>'; 
+
 }
 
 $conn->close();
