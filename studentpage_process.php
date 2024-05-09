@@ -1,15 +1,14 @@
 <?php
+// signup_process.php
+
 header("Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src * 'unsafe-eval' 'unsafe-inline';");
 header("X-XSS-Protection: 1; mode=block");
 session_start();
 
-// signup_process.php
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "auth_student";
-
-
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -18,27 +17,20 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-
-
-
-// Get form data
-$username = $_POST['username'];
-$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-
-$_SESSION['csrf_token_signup'] = $_POST['csrf_token_signup'];
-    if (!isset($_POST['csrf_token_signup']) || $_POST['csrf_token_signup'] !== $_SESSION['csrf_token_signup']) {
-        die("CSRF token validation failed");
-    }
-
+//get data
+$name = $_POST['name'];
+$marticnumber = $_POST['matricnumber'];
+$email = $_POST['email'];
+$phonenumber = $_POST['phonenumber'];
 
 // Insert data into database
-$sql = "INSERT INTO users (username, password) VALUES ('$username','$password')";
+$sql = "INSERT INTO students (name, matricnumber, email, phonenumber ) VALUES ('$name','$matricnumber', '$email', '$phonenumber')";
 
 
 
 if ($conn->query($sql) === TRUE) {
-    echo "User registered successfully.";
-    echo '<button onclick="location.href=\'login.php\'">Go to Login</button>';
+    echo "Student registered successfully.";
+
 } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
 }
@@ -47,4 +39,19 @@ if ($conn->query($sql) === TRUE) {
 $conn->close();
 
 
+?>
+
+
+<?php
+session_start();
+
+// Check if the user is logged in
+if (isset($_SESSION['studentpage'])) {
+    // Remove the session variable
+    unset($_SESSION['studentpage']);
+}
+
+// Redirect the user to the login page or any other desired page
+header("Location: login.php");
+exit();
 ?>
